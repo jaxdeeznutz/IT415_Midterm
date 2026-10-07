@@ -1,57 +1,51 @@
-<<<<<<< HEAD
 # Campus Store touchscreen POS
 
-A local demonstration kiosk implementing the IT415 practical exam flow: select products, review order, choose payment, complete payment, view receipt and start a new transaction.
+IT415 self-service kiosk: Order -> Review -> Payment -> Payment Successful -> Digital Receipt -> New Transaction.
 
 ## Run
 
-Open **index.html** in Microsoft Edge or Google Chrome. No install, server, network or API keys are required. Extract the ZIP before opening. For a kiosk demonstration, use the browser's full-screen mode (F11).
-
-All payments are simulated. The QR placeholder cannot collect money; card processing does not request or store card information.
+Open `index.html` in Chrome or Microsoft Edge. No server, installation, network connection or API keys are required. Use F11 for a full-screen kiosk demonstration. All payments are simulated; the QR placeholder cannot collect money and no card details are requested.
 
 ## Features
 
-- Six sample products with prices, categories and large touch cards.
-- Increase/decrease quantities (0–99), remove items, live subtotals and total.
-- Review and back navigation preserving the cart; empty checkout disabled.
-- Cash keypad, quick amounts, typed decimal input and insufficient/invalid payment feedback.
-- QR confirmation and a short card-processing state with controls locked.
-- Unique UUID transaction reference, success screen and printable receipt.
-- New Transaction clears cart, payment amount, receipt, reference and category.
-- Responsive layout, labelled controls, visible keyboard focus and status messages.
+- Six products, category filters, quantities up to 99, removal and live totals.
+- Review and back navigation preserve the current order.
+- Cash keypad and quick amounts, validation and change preview; simulated QR and card approval.
+- Processing locks prevent duplicate payment actions.
+- Payment Successful shows a UUID reference, Manila date/time, method, transaction amount, amount paid and change.
+- Digital receipt lists purchased items, quantities, unit prices, subtotals and payment details. Print Receipt opens the browser print dialog with a receipt-only layout.
+- New Transaction is available on confirmation and receipt. It clears the cart, category, cash input, transaction snapshot, reference, receipt, busy state and previous notification.
+- Shared green visual style, large touch controls, keyboard focus, labelled tables, live feedback and responsive layouts.
 
-## Files and architecture
+## Files and design
 
-`index.html` is the entry point. `styles.css` controls presentation and print layout. `core.js` contains product data, centavo arithmetic and cash validation. `app.js` renders the screens and handles transitions. Completed transactions snapshot their items so the receipt represents the paid order. Amounts use integer centavos to avoid floating-point errors. Receipt time uses Asia/Manila.
+| File | Responsibility |
+| --- | --- |
+| `index.html` | Entry point, shared brand header and progress navigation |
+| `core.js` | Product data, integer-centavo arithmetic and cash validation |
+| `app.js` | Screen rendering, payment simulation, completed transaction snapshot and reset |
+| `styles.css` | Shared visual tokens, responsive screens, reduced motion and receipt print layout |
+| `tests/` | Calculation tests and end-to-end browser regression |
+| `docs/PAYMENT.md` | Member 2 payment implementation notes |
+| `docs/RECEIPT-QA.md` | Member 3 changes and end-to-end evaluation checklist |
+| `docs/AI-LOG.md` | AI-assisted development record |
 
-Storage is intentionally in memory. Refreshing or closing the page clears the current order and receipt; there is no persistent transaction history. Product quantities are limited to 99 per item as a usability guard, not a stock count. Cash accepts up to seven whole-number digits and two decimals; commas, exponents and negative numbers are rejected.
+Subtotal = unit price x quantity; total = sum of subtotals; change = amount paid - total. All values are integer centavos until formatting. QR/card record exact payment with zero change. Member 3 did not change `core.js` or these formulas.
 
-## Tests
+State is held only in memory. Reloading or closing the page clears it; there is no transaction history or backend. The completed transaction captures items and totals once and is reused by both final screens. Time is displayed in Asia/Manila (PHT). UUID references are generated with the browser's `crypto.randomUUID()`.
 
-With Node.js installed, run from this folder:
+## Verification
 
-```
+With Node.js installed:
+
+```sh
+node --check app.js
 node --test tests/core.test.cjs
+node tests/browser.test.cjs
 ```
 
-The browser test requires Playwright and Microsoft Edge. Set `PLAYWRIGHT_MODULE` to an installed Playwright module path if it is not available through normal Node resolution, then run `node tests/browser.test.cjs`. It opens the local index.html; no server is needed.
+Browser tests require Playwright and Microsoft Edge. Set `PLAYWRIGHT_MODULE` to an installed Playwright module path if needed; optionally set `BROWSER_EXE` to another Chromium executable. Set `QA_DIR` to an existing folder to save screenshots. See [the regression checklist](docs/RECEIPT-QA.md).
 
-See `docs/ACCEPTANCE.md` for verification results and `docs/PLAN.md` for the implementation plan.
+## Team evidence
 
-## Group contribution evidence
-
-The provided checklist also requires a real shared GitHub repository, local clone, at least seven genuine development stages, member feature branches, pushes, pull requests, review before merge and an identified final integration commit. Those records are not created by this package. No member names, repository URL or access instructions were supplied.
-
-Complete the following with actual evidence:
-
-| Member | GitHub account | Feature and branch | Commits | PR | Reviewer and merge status |
-| --- | --- | --- | --- | --- | --- |
-| To be supplied by the group | | | | | |
-
-Repository URL: pending. Integration branch and final SHA: pending. Instructor access verification: pending.
-
-See `docs/AI-LOG.md` for the AI assistance record. Each member should understand and explain the code they demonstrate.
-=======
-# IT415_Midterm
-for midterm exam requirements
->>>>>>> b892d528726b5bd26e15eaf15871908fcbcc1ea4
+Member 3 branch: `feature/receipt-ui-docs`. Add actual member names, repository URL, commit and PR links, reviewer and final integration SHA when available. This documentation does not claim that pushes, reviews or merges have occurred. Each member should be able to explain the code they demonstrate.
