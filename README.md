@@ -1,51 +1,101 @@
-# Campus Store touchscreen POS
+# Campus Store Touchscreen POS
 
-IT415 self-service kiosk: Order -> Review -> Payment -> Payment Successful -> Digital Receipt -> New Transaction.
+A touchscreen-oriented self-service Point of Sale kiosk developed for the **IT415 – Application Development and Emerging Technologies Practical Examination**.
 
-## Run
+The system follows the required transaction flow:
 
-Open `index.html` in Chrome or Microsoft Edge. No server, installation, network connection or API keys are required. Use F11 for a full-screen kiosk demonstration. All payments are simulated; the QR placeholder cannot collect money and no card details are requested.
+**Order → Review → Payment → Payment Successful → Digital Receipt → New Transaction**
+
+The application is implemented using **HTML, CSS, and JavaScript only**. No backend or database is required because the practical examination uses a simulated local kiosk transaction flow.
+
+---
+
+## Live System
+
+Hosted using Vercel:
+
+**https://campusstore-inky.vercel.app**
+
+---
+
+## GitHub Repository
+
+**https://github.com/jaxdeeznutz/IT415_Midterm**
+
+---
 
 ## Features
 
-- Six products, category filters, quantities up to 99, removal and live totals.
-- Review and back navigation preserve the current order.
-- Cash keypad and quick amounts, validation and change preview; simulated QR and card approval.
-- Processing locks prevent duplicate payment actions.
-- Payment Successful shows a UUID reference, Manila date/time, method, transaction amount, amount paid and change.
-- Digital receipt lists purchased items, quantities, unit prices, subtotals and payment details. Print Receipt opens the browser print dialog with a receipt-only layout.
-- New Transaction is available on confirmation and receipt. It clears the cart, category, cash input, transaction snapshot, reference, receipt, busy state and previous notification.
-- Shared green visual style, large touch controls, keyboard focus, labelled tables, live feedback and responsive layouts.
+- Six selectable products with names, categories, prices, and large touchscreen-friendly cards
+- Category filtering for All, Drinks, Food, and Snacks
+- Product selection by clicking or tapping
+- Increase and decrease product quantities
+- Remove products from the current order
+- Automatic item subtotal calculation
+- Automatic total calculation
+- Order Review screen
+- Back navigation while preserving selected items
+- Three payment methods:
+  - Cash
+  - QR Payment
+  - Credit / Debit Card
+- Cash payment validation
+- Insufficient payment rejection
+- Exact payment support
+- Automatic change calculation
+- Simulated QR payment
+- Simulated Credit/Debit Card payment
+- Processing state and duplicate-payment protection
+- Payment Successful confirmation screen
+- Unique transaction reference using `crypto.randomUUID()`
+- Manila date and time display
+- Digital receipt
+- Receipt item quantities, unit prices, subtotals, total, payment method, amount paid, and change
+- Print Receipt option using the browser print dialog
+- New Transaction reset
+- Responsive touchscreen-oriented interface
+- Accessible labels, focus states, feedback messages, and large touch controls
 
-## Files and design
+---
 
-| File | Responsibility |
+## Technology Used
+
+- HTML5
+- CSS3
+- JavaScript
+- Git
+- GitHub
+- Visual Studio Code
+- OpenAI Codex for AI-assisted development
+- Vercel for deployment
+
+No external frontend framework, backend framework, database, or real payment gateway is used.
+
+---
+
+## Project Files
+
+| File / Folder | Purpose |
 | --- | --- |
-| `index.html` | Entry point, shared brand header and progress navigation |
-| `core.js` | Product data, integer-centavo arithmetic and cash validation |
-| `app.js` | Screen rendering, payment simulation, completed transaction snapshot and reset |
-| `styles.css` | Shared visual tokens, responsive screens, reduced motion and receipt print layout |
-| `tests/` | Calculation tests and end-to-end browser regression |
-| `docs/PAYMENT.md` | Member 2 payment implementation notes |
-| `docs/RECEIPT-QA.md` | Member 3 changes and end-to-end evaluation checklist |
+| `index.html` | Main application entry point and shared kiosk structure |
+| `styles.css` | UI styling, responsive layout, touchscreen design, and print layout |
+| `core.js` | Product data, transaction calculations, and cash validation |
+| `app.js` | Screen rendering, navigation, cart actions, payment simulation, receipt, and reset |
+| `tests/` | Calculation and browser regression tests |
+| `docs/PAYMENT.md` | Payment-processing implementation and validation notes |
+| `docs/RECEIPT-QA.md` | Receipt, reset, and final regression checklist |
 | `docs/AI-LOG.md` | AI-assisted development record |
+| `README.md` | Project overview and development evidence |
 
-Subtotal = unit price x quantity; total = sum of subtotals; change = amount paid - total. All values are integer centavos until formatting. QR/card record exact payment with zero change. Member 3 did not change `core.js` or these formulas.
+---
 
-State is held only in memory. Reloading or closing the page clears it; there is no transaction history or backend. The completed transaction captures items and totals once and is reused by both final screens. Time is displayed in Asia/Manila (PHT). UUID references are generated with the browser's `crypto.randomUUID()`.
+## Transaction Calculations
 
-## Verification
+The application uses integer centavos internally to avoid floating-point calculation issues.
 
-With Node.js installed:
+```text
+Item Subtotal = Unit Price × Quantity
 
-```sh
-node --check app.js
-node --test tests/core.test.cjs
-node tests/browser.test.cjs
-```
+Transaction Total = Sum of all item subtotals
 
-Browser tests require Playwright and Microsoft Edge. Set `PLAYWRIGHT_MODULE` to an installed Playwright module path if needed; optionally set `BROWSER_EXE` to another Chromium executable. Set `QA_DIR` to an existing folder to save screenshots. See [the regression checklist](docs/RECEIPT-QA.md).
-
-## Team evidence
-
-Member 3 branch: `feature/receipt-ui-docs`. Add actual member names, repository URL, commit and PR links, reviewer and final integration SHA when available. This documentation does not claim that pushes, reviews or merges have occurred. Each member should be able to explain the code they demonstrate.
+Cash Change = Amount Paid − Transaction Total
