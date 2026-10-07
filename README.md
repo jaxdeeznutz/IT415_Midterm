@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Campus Store touchscreen POS
 
 A local demonstration kiosk implementing the IT415 practical exam flow: select products, review order, choose payment, complete payment, view receipt and start a new transaction.
@@ -50,3 +51,7 @@ Complete the following with actual evidence:
 Repository URL: pending. Integration branch and final SHA: pending. Instructor access verification: pending.
 
 See `docs/AI-LOG.md` for the AI assistance record. Each member should understand and explain the code they demonstrate.
+=======
+# IT415_Midterm
+for midterm exam requirements
+>>>>>>> b892d528726b5bd26e15eaf15871908fcbcc1ea4
